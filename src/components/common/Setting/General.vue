@@ -26,6 +26,8 @@ const name = ref(userInfo.value.name ?? '')
 
 const description = ref(userInfo.value.description ?? '')
 
+const apiKey = computed(() => appStore.apiKey)
+
 const language = computed({
   get() {
     return appStore.language
@@ -60,6 +62,11 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
   { label: '한국어', key: 'ko-KR', value: 'ko-KR' },
   { label: 'Русский язык', key: 'ru-RU', value: 'ru-RU' },
 ]
+
+function updateApiKey(apiKey: string) {
+	appStore.setApiKey(apiKey)
+	ms.success(t('common.success'))
+}
 
 function updateUserInfo(options: Partial<UserInfo>) {
   userStore.updateUserInfo(options)
@@ -125,6 +132,15 @@ function handleImportButtonClick(): void {
 <template>
   <div class="p-4 space-y-5 min-h-[200px]">
     <div class="space-y-6">
+			<div class="flex items-center space-x-4">
+				<span class="flex-shrink-0 w-[100px]">apiKey</span>
+				<div class="flex-1">
+					<NInput v-model:value="apiKey" placeholder="" />
+				</div>
+				<NButton size="tiny" text type="primary" @click="updateApiKey(apiKey)">
+					{{ $t('common.save') }}
+				</NButton>
+			</div>
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.avatarLink') }}</span>
         <div class="flex-1">

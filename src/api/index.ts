@@ -1,6 +1,6 @@
 import type { AxiosProgressEvent, GenericAbortSignal } from 'axios'
 import { post } from '@/utils/request'
-import { useAuthStore, useSettingStore } from '@/store'
+import {useAppStore, useAuthStore, useSettingStore} from '@/store'
 
 export function fetchChatAPI<T = any>(
   prompt: string,
@@ -29,8 +29,10 @@ export function fetchChatAPIProcess<T = any>(
 ) {
   const settingStore = useSettingStore()
   const authStore = useAuthStore()
+	const appStore = useAppStore()
 
   let data: Record<string, any> = {
+		apiKey: appStore.apiKey,
     prompt: params.prompt,
     options: params.options,
   }

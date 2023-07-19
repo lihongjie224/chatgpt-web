@@ -23,6 +23,11 @@ export const useAppStore = defineStore('app-store', {
       }
     },
 
+		setApiKey(apiKey: string) {
+			this.apiKey = apiKey
+			this.recordState()
+		},
+
     recordState() {
       setLocalSetting(this.$state)
     },
