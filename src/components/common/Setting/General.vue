@@ -26,7 +26,7 @@ const name = ref(userInfo.value.name ?? '')
 
 const description = ref(userInfo.value.description ?? '')
 
-const apiKey = computed(() => appStore.apiKey)
+const apiKey = ref(appStore.apiKey)
 
 const language = computed({
   get() {
