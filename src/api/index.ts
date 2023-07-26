@@ -33,6 +33,7 @@ export function fetchChatAPIProcess<T = any>(
 
   let data: Record<string, any> = {
 		apiKey: appStore.apiKey,
+		model: appStore.model.toString(),
     prompt: params.prompt,
     options: params.options,
   }

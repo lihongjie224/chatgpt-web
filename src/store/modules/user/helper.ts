@@ -15,16 +15,15 @@ export interface UserState {
 export function defaultSetting(): UserState {
   return {
     userInfo: {
-      avatar: 'https://raw.githubusercontent.com/Chanzhaoyu/chatgpt-web/main/src/assets/avatar.jpg',
-      name: 'ChenZhaoYu',
-      description: 'Star on <a href="https://github.com/Chanzhaoyu/chatgpt-bot" class="text-blue-500" target="_blank" >GitHub</a>',
+      avatar: 'https://api.abtalk.cn/logo.png',
+      name: 'AbTalk',
+      description: '<a href="https://api.abtalk.cn/token" style="color: blue;" target="_blank">apiKey获取</a>&nbsp;&nbsp;&nbsp;<a href="https://api.abtalk.cn/log" style="color: blue;" target="_blank">消费日志</a>',
     },
   }
 }
 
 export function getLocalState(): UserState {
-  const localSetting: UserState | undefined = ss.get(LOCAL_NAME)
-  return { ...defaultSetting(), ...localSetting }
+  return { ...defaultSetting() }
 }
 
 export function setLocalState(setting: UserState): void {

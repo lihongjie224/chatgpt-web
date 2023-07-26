@@ -27,7 +27,6 @@ const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT
 const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
 
 let apiModel: ApiModel
-const model = isNotEmptyString(process.env.OPENAI_API_MODEL) ? process.env.OPENAI_API_MODEL : 'gpt-3.5-turbo'
 
 
 (async () => {
@@ -36,7 +35,7 @@ const model = isNotEmptyString(process.env.OPENAI_API_MODEL) ? process.env.OPENA
 
 })()
 
-function initChatGPTAPI(apiKey: string) {
+function initChatGPTAPI(apiKey: string, model: string) {
 	const OPENAI_API_BASE_URL = process.env.OPENAI_API_BASE_URL
 
 	const options: ChatGPTAPIOptions = {
@@ -75,12 +74,12 @@ function initChatGPTAPI(apiKey: string) {
 }
 
 async function chatReplyProcess(options: RequestOptions) {
-  const { apiKey, message, lastContext, process, systemMessage, temperature, top_p } = options
+  const { apiKey, model, message, lastContext, process, systemMessage, temperature, top_p } = options
 
 	if (!apiKey) {
 		return sendResponse({ type: 'Fail', message: '请先配置apiKey,[详细配置流程](https://api.abtalk.cn)' })
 	}
-	let api = initChatGPTAPI(apiKey)
+	let api = initChatGPTAPI(apiKey, model)
   try {
     let options: SendMessageOptions = { timeoutMs }
 

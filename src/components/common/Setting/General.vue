@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { NButton, NInput, NPopconfirm, NSelect, useMessage } from 'naive-ui'
-import type { Language, Theme } from '@/store/modules/app/helper'
+import { NButton, NInput, NPopconfirm, NSelect, NTag, useMessage } from 'naive-ui'
+import type { Language, Theme, Model } from '@/store/modules/app/helper'
 import { SvgIcon } from '@/components/common'
 import { useAppStore, useUserStore } from '@/store'
 import type { UserInfo } from '@/store/modules/user/helper'
@@ -27,6 +27,15 @@ const name = ref(userInfo.value.name ?? '')
 const description = ref(userInfo.value.description ?? '')
 
 const apiKey = ref(appStore.apiKey)
+
+const model = computed({
+	get() {
+		return appStore.model
+	},
+	set(value: Model) {
+		appStore.setModel(value)
+	}
+})
 
 const language = computed({
   get() {
@@ -61,6 +70,11 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
   { label: 'English', key: 'en-US', value: 'en-US' },
   { label: '한국어', key: 'ko-KR', value: 'ko-KR' },
   { label: 'Русский язык', key: 'ru-RU', value: 'ru-RU' },
+]
+
+const modelOptions: { label: string; key: Model; value: Model }[] = [
+	{ label: 'gpt-3.5-turbo-0613', key: 'gpt-3.5-turbo-0613', value: 'gpt-3.5-turbo-0613'},
+	{ label: 'gpt-4-0613', key: 'gpt-4-0613', value: 'gpt-4-0613'}
 ]
 
 function updateApiKey(apiKey: string) {
@@ -141,33 +155,22 @@ function handleImportButtonClick(): void {
 					{{ $t('common.save') }}
 				</NButton>
 			</div>
-      <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">{{ $t('setting.avatarLink') }}</span>
-        <div class="flex-1">
-          <NInput v-model:value="avatar" placeholder="" />
-        </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ avatar })">
-          {{ $t('common.save') }}
-        </NButton>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">{{ $t('setting.name') }}</span>
-        <div class="w-[200px]">
-          <NInput v-model:value="name" placeholder="" />
-        </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ name })">
-          {{ $t('common.save') }}
-        </NButton>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">{{ $t('setting.description') }}</span>
-        <div class="flex-1">
-          <NInput v-model:value="description" placeholder="" />
-        </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ description })">
-          {{ $t('common.save') }}
-        </NButton>
-      </div>
+
+			<div class="flex items-center space-x-4">
+				<span class="flex-shrink-0 w-[100px]">模型</span>
+				<div class="flex-1">
+					<NSelect
+						style="width: 180px"
+						:value="model"
+						:options="modelOptions"
+						@update-value="value => appStore.setModel(value)"
+					/>
+				</div>
+				<NTag type="error">
+					切换至gpt4模型会使余额消耗倍率*40
+				</NTag>
+			</div>
+
       <div
         class="flex items-center space-x-4"
         :class="isMobile && 'items-start'"
