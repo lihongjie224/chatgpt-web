@@ -17,7 +17,7 @@ export function defaultSetting(): UserState {
     userInfo: {
       avatar: 'https://api.abtalk.cn/logo.png',
       name: 'AbTalk',
-      description: '<a href="https://api.abtalk.cn/token" style="color: blue;" target="_blank">apiKey获取</a>&nbsp;&nbsp;&nbsp;<a href="https://api.abtalk.cn/log" style="color: blue;" target="_blank">消费日志</a>',
+      description: '<a href="https://api.abtalk.cn/token" style="color: blue;" target="_blank">apiKey获取</a>&nbsp;&nbsp;&nbsp;<a href="https://api.abtalk.cn/log" style="color: blue;" target="_blank">日志</a>',
     },
   }
 }
