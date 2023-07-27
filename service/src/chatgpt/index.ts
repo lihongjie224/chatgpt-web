@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv'
+import Keyv from 'keyv'
 import 'isomorphic-fetch'
 import type { ChatGPTAPIOptions, ChatMessage, SendMessageOptions } from 'chatgpt'
 import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt'
@@ -7,8 +8,10 @@ import httpsProxyAgent from 'https-proxy-agent'
 import fetch from 'node-fetch'
 import { sendResponse } from '../utils'
 import { isNotEmptyString } from '../utils/is'
+
 import type { ApiModel, ChatContext, ChatGPTUnofficialProxyAPIOptions, ModelConfig } from '../types'
 import type { RequestOptions, SetProxyOptions, UsageResponse } from './types'
+import {MemoryStore} from "express-rate-limit";
 
 const { HttpsProxyAgent } = httpsProxyAgent
 
@@ -25,6 +28,9 @@ const ErrorCodeMessage: Record<string, string> = {
 
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 100 * 1000
 const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
+
+const messageStore = new Keyv({ namespace: 'chatgpt-web' })
+
 
 let apiModel: ApiModel
 
@@ -68,7 +74,7 @@ function initChatGPTAPI(apiKey: string, model: string) {
 
 	setupProxy(options)
 
-	let api = new ChatGPTAPI({ ...options })
+	let api = new ChatGPTAPI({ ...options, messageStore })
 	apiModel = 'ChatGPTAPI'
 	return api;
 }
