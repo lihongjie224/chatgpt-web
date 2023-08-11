@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv'
 import Keyv from 'keyv'
+import KeyvRedis from '@keyv/redis'
 import 'isomorphic-fetch'
 import type { ChatGPTAPIOptions, ChatMessage, SendMessageOptions } from 'chatgpt'
 import { ChatGPTAPI, ChatGPTUnofficialProxyAPI } from 'chatgpt'
@@ -29,8 +30,10 @@ const ErrorCodeMessage: Record<string, string> = {
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 100 * 1000
 const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
 
-const messageStore = new Keyv({ namespace: 'chatgpt-web' })
+const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
+const store = new KeyvRedis(redisUrl)
 
+const messageStore = new Keyv({ store, namespace: 'chatgpt-web' })
 
 let apiModel: ApiModel
 
